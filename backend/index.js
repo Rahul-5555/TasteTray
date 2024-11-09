@@ -5,13 +5,18 @@ const mongoDB = require("./db");
 mongoDB();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://tastetray.onrender.com");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  const allowedOrigins = ['http://localhost:3000', 'https://tastytray.netlify.app'];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
-})
+});
+
 
 app.use(express.json())
 app.use('/api', require("./Routes/CreateUser"));
